@@ -7,9 +7,13 @@ var app = express();
 var port = process.env.PORT || 3000;
 
 //Check for a valid response
-var surveyResponses = ["Angular", "Ember", "React", "Vanilla", "Other"];
+var surveyResponses = ["angular", "ember", "react", "vanilla", "other"];
 var surveyResults = {};
 surveyResponses.map(function(e) {surveyResults[e] = 0;});
+
+function capitalize(str) {
+  return str.substr(0, 1).toUpperCase() + str.substr(1);
+}
 
 app.use(bodyParser.urlencoded());
 
@@ -20,10 +24,10 @@ app.post("/sms", function(req, res) {
   var responseBody = "";
   
   var validResponses = surveyResponses.filter(function(e) {
-    return message.toLowerCase().indexOf(e.toLowerCase()) > -1;
+    return message.toLowerCase().indexOf(e) > -1;
   });
 
-  validResponses.map(function(e) {surveyResults[e.toLowerCase()]++;});
+  validResponses.map(function(e) {surveyResults[e]++;});
 
   console.log(surveyResults);
 
@@ -31,7 +35,7 @@ app.post("/sms", function(req, res) {
     responseBody = "Thank you for voting";
   } else {
     responseBody = "This was not a valid choice.  Valid answers are ";
-    surveyResponses.map(function(e) {responseBody += e + ", "});
+    surveyResponses.map(function(e) {responseBody += capitalize(e) + ", "});
     responseBody = responseBody.substr(0, responseBody.length-2);
   }
 
@@ -42,7 +46,7 @@ app.post("/sms", function(req, res) {
 app.get("/results", function(req, res) {
   var chartData = [];
   for (var key in surveyResults) {
-    chartData.push([key, surveyResults[key]]);
+    chartData.push([capitalize(key), surveyResults[key]]);
   }
   res.json(chartData);
 });
