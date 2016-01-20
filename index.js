@@ -6,25 +6,37 @@ var bodyParser = require("body-parser");
 var app = express();
 var port = process.env.PORT || 3000;
 
+//Check for a valid response
+var surveyResponses = ["angular", "ember", "react", "vanilla", "other"];
+var surveyResults = {};
+surveyResponses.map(function(e) {surveyResults[e] = 0;});
+
 app.use(bodyParser.urlencoded());
 
 app.post("/sms", function(req, res) {
-  var body = req.body;//.trim();
+  var body = req.body;
+  var from = body.From;
+  var message = body.Body;
+  var responseBody = "";
   
-  // the number the vote it being sent to (this should match an Event)
-  var to = req.param('To');
-  
-  // the voter, use this to keep people from voting more than once
-  var from = req.param('From');
+  var validResponses = validResponses.filter(function(e) {
+    return message.toLowerCase().indexOf(e) > -1;
+  });
 
+  validResponses.map(function(e) {surveyResults[e]++;});
 
-  console.log("received req");
-  console.log(req.params);
+  console.log(surveyResults);
 
-  console.log(body, to, from);
+  if (validResponses.length) {
+    responseBody = "Thank you for voting";
+  } else {
+    responseBody = "This was not a valid choice.  Valid answers are ";
+    surveyResponses.map(function(e) {responseBody += e + ", "});
+    responseBody = responseBody.substr(0, responseBody.length-2);
+  }
 
   res.header('Content-Type', 'text/xml');
-  res.send("<?xml version='1.0' encoding='UTF-8' ?><Response><Message>Hey, I got your message</Message></Response>");
+  res.send("<?xml version='1.0' encoding='UTF-8' ?><Response><Message>" + responseBody + "</Message></Response>");
 });
 
 //Serve static files from the public_html folder
