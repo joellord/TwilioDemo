@@ -98,14 +98,17 @@
 
 <script type="text/javascript">
 $(document).on("ready", function() {
+
+    var graph = c3.generate({
+        bindto: '#resultsGraph',
+        data: {
+            type: "pie",
+            columns: []
+        }
+    });
+
     $.get("/results").done(function(result) {
-        var graph = c3.generate({
-            bindto: '#resultsGraph',
-            data: {
-                type: "pie",
-                columns: result
-            }
-        });
+        grah.load({columns: result});
     });
 });
 </script>
