@@ -6,7 +6,7 @@ var bodyParser = require("body-parser");
 var app = express();
 var port = process.env.PORT || 3000;
 
-app.use(bodyParser.json());
+app.use(bodyParser.raw());
 
 app.post("/sms", function(req, res) {
   console.log("received req");
