@@ -6,6 +6,9 @@ var bodyParser = require("body-parser");
 var app = express();
 var port = process.env.PORT || 3000;
 
+var server = require("http").createServer(app);
+var io = require("socket.io")(server);
+
 //Check for a valid response
 var surveyResponses = ["angular", "ember", "react", "vanilla", "other"];
 var surveyResults = {};
@@ -33,10 +36,12 @@ app.post("/sms", function(req, res) {
 
   if (validResponses.length) {
     responseBody = "Thank you for voting";
+    io.emit("new_result", {from: from, results: formattedChartData()});
   } else {
     responseBody = "This was not a valid choice.  Valid answers are ";
     surveyResponses.map(function(e) {responseBody += capitalize(e) + ", "});
     responseBody = responseBody.substr(0, responseBody.length-2);
+    io.emit("invalid_response", {from: from, message: message});
   }
 
   res.header('Content-Type', 'text/xml');
@@ -44,12 +49,17 @@ app.post("/sms", function(req, res) {
 });
 
 app.get("/results", function(req, res) {
+  var data = formattedChartData();
+  res.json(data);
+});
+
+function formattedChartData() {
   var chartData = [];
   for (var key in surveyResults) {
     chartData.push([capitalize(key), surveyResults[key]]);
   }
-  res.json(chartData);
-});
+  return chartData;
+}
 
 //Serve static files from the public_html folder
 app.use(express.static(__dirname + "/public_html"));

@@ -97,6 +97,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js"></script>
 
 <script type="text/javascript">
+var socket = io();
+
 $(document).on("ready", function() {
 
     var graph = c3.generate({
@@ -109,6 +111,15 @@ $(document).on("ready", function() {
 
     $.get("/results").done(function(result) {
         graph.load({columns: result});
+    });
+
+    socket.on("new_result", function(data) {
+        graph.load({columns: data.results});
+        console.log("New result from " + data.from); 
+    });
+
+    socket.on("invalid_response", function(data) {
+        console.log(data);
     });
 });
 </script>
