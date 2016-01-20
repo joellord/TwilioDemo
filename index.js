@@ -40,7 +40,11 @@ app.post("/sms", function(req, res) {
 });
 
 app.get("/results", function(req, res) {
-  res.json(surveyResults);
+  var chartData = [];
+  for (var key in surveyResults) {
+    chartData.push([key, surveyResults[key]]);
+  }
+  res.json(chartData);
 });
 
 //Serve static files from the public_html folder
