@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.post("/sms", function(req, res) {
   console.log("received req");
   console.log(req.body);
-  res.send("OK");
+  res.send("<?xml version='1.0' encoding='UTF-8' ?><Response><Message>Hey, I got your message</Message></Response>");
 });
 
 //Serve static files from the public_html folder
