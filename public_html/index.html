@@ -99,6 +99,8 @@
 <script type="text/javascript">
 $(document).on("ready", function() {
 
+    var currentData = {};
+
     var graph = c3.generate({
         bindto: '#resultsGraph',
         data: {
@@ -109,7 +111,10 @@ $(document).on("ready", function() {
 
     function pollData() {
         $.get("/results").done(function(result) {
-            graph.load({columns: result});
+            if (result !== currentData) {
+                graph.load({columns: result});
+                currentData = result;
+            }
         });
     }
 
