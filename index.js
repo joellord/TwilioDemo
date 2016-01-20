@@ -6,11 +6,11 @@ var bodyParser = require("body-parser");
 var app = express();
 var port = process.env.PORT || 3000;
 
-app.use(bodyParser.raw());
+// app.use(bodyParser.raw());
 
 app.post("/sms", function(req, res) {
   res.header('Content-Type', 'text/xml');
-  var body = req.param('Body').trim();
+  var body = req.param('Body');//.trim();
   
   // the number the vote it being sent to (this should match an Event)
   var to = req.param('To');
