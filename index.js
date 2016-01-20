@@ -6,8 +6,8 @@ var bodyParser = require("body-parser");
 var app = express();
 var port = process.env.PORT || 3000;
 
-var server = require("http").createServer(app);
-var io = require("socket.io")(server);
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
 //Check for a valid response
 var surveyResponses = ["angular", "ember", "react", "vanilla", "other"];
