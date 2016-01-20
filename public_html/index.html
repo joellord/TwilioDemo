@@ -97,20 +97,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js"></script>
 
 <script type="text/javascript">
-
-
-    //Initialize all 3 graphics
-    var graph = c3.generate({
-        bindto: '#resultsGraph',
-        data: {
-            columns: [
-                ["Angular", 2],
-                ["Ember", 5]
-            ]
-        }
-    });=
-
-};
+$(document).on("ready", function() {
+    $.get("/results").done(function(result) {
+        var graph = c3.generate({
+            bindto: '#resultsGraph',
+            data: {
+                columns: result
+            }
+        });
+    });
+});
 </script>
 </body>
 </html>
