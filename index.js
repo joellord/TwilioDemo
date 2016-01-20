@@ -9,14 +9,14 @@ var port = process.env.PORT || 3000;
 app.use(bodyParser.raw());
 
 app.post("/sms", function(req, res) {
-  response.header('Content-Type', 'text/xml');
-  var body = request.param('Body').trim();
+  res.header('Content-Type', 'text/xml');
+  var body = req.param('Body').trim();
   
   // the number the vote it being sent to (this should match an Event)
-  var to = request.param('To');
+  var to = req.param('To');
   
   // the voter, use this to keep people from voting more than once
-  var from = request.param('From');
+  var from = req.param('From');
 
 
   console.log("received req");
