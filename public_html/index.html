@@ -111,7 +111,7 @@ $(document).on("ready", function() {
 
     function pollData() {
         $.get("/results").done(function(result) {
-            if (result !== currentData) {
+            if (JSON.stringify(result) !== json.stringify(currentData)) {
                 graph.load({columns: result});
                 currentData = result;
             }
