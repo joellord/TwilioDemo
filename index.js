@@ -7,7 +7,7 @@ var app = express();
 var port = process.env.PORT || 3000;
 
 //Check for a valid response
-var surveyResponses = ["angular", "ember", "react", "vanilla", "other"];
+var surveyResponses = ["Angular", "Ember", "React", "Vanilla", "Other"];
 var surveyResults = {};
 surveyResponses.map(function(e) {surveyResults[e] = 0;});
 
@@ -20,10 +20,10 @@ app.post("/sms", function(req, res) {
   var responseBody = "";
   
   var validResponses = surveyResponses.filter(function(e) {
-    return message.toLowerCase().indexOf(e) > -1;
+    return message.toLowerCase().indexOf(e.toLowerCase()) > -1;
   });
 
-  validResponses.map(function(e) {surveyResults[e]++;});
+  validResponses.map(function(e) {surveyResults[e.toLowerCase()]++;});
 
   console.log(surveyResults);
 
