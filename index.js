@@ -6,11 +6,10 @@ var bodyParser = require("body-parser");
 var app = express();
 var port = process.env.PORT || 3000;
 
-// app.use(bodyParser.raw());
+app.use(bodyParser.urlencoded());
 
 app.post("/sms", function(req, res) {
-  res.header('Content-Type', 'text/xml');
-  var body = req.param('Body');//.trim();
+  var body = req.body;//.trim();
   
   // the number the vote it being sent to (this should match an Event)
   var to = req.param('To');
@@ -21,7 +20,10 @@ app.post("/sms", function(req, res) {
 
   console.log("received req");
   console.log(req.params);
+
   console.log(body, to, from);
+
+  res.header('Content-Type', 'text/xml');
   res.send("<?xml version='1.0' encoding='UTF-8' ?><Response><Message>Hey, I got your message</Message></Response>");
 });
 
