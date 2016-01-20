@@ -6,13 +6,10 @@ var bodyParser = require("body-parser");
 var app = express();
 var port = process.env.PORT || 3000;
 
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-
 //Check for a valid response
 var surveyResponses = ["angular", "ember", "react", "vanilla", "other"];
 var surveyResults = {};
-surveyResponses.map(function(e) {surveyResults[e] = 0;});
+surveyResponses.map(function(e) {surveyResults[e] = Math.floor(Math.random()*3);});
 
 function capitalize(str) {
   return str.substr(0, 1).toUpperCase() + str.substr(1);
@@ -36,12 +33,10 @@ app.post("/sms", function(req, res) {
 
   if (validResponses.length) {
     responseBody = "Thank you for voting";
-    io.emit("new_result", {from: from, results: formattedChartData()});
   } else {
     responseBody = "This was not a valid choice.  Valid answers are ";
     surveyResponses.map(function(e) {responseBody += capitalize(e) + ", "});
     responseBody = responseBody.substr(0, responseBody.length-2);
-    io.emit("invalid_response", {from: from, message: message});
   }
 
   res.header('Content-Type', 'text/xml');
