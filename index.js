@@ -39,6 +39,10 @@ app.post("/sms", function(req, res) {
   res.send("<?xml version='1.0' encoding='UTF-8' ?><Response><Message>" + responseBody + "</Message></Response>");
 });
 
+app.get("/results", function(req, res) {
+  res.json(surveyResults);
+});
+
 //Serve static files from the public_html folder
 app.use(express.static(__dirname + "/public_html"));
 
