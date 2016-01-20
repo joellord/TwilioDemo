@@ -19,7 +19,7 @@ app.post("/sms", function(req, res) {
   var message = body.Body;
   var responseBody = "";
   
-  var validResponses = validResponses.filter(function(e) {
+  var validResponses = surveyResponses.filter(function(e) {
     return message.toLowerCase().indexOf(e) > -1;
   });
 
