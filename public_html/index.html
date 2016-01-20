@@ -52,11 +52,13 @@
     <div class="container">
         <h1>Twilio</h1>
         <p>
-           
+           This demo is a visualization dashboard for an SMS survey.  Users can cast their vote the the phone numnber indicated below and the graphic will update in real-time.
         </p>
         <p>
+            There are no limitations to the number of times a user can vote as we wanted to keep this code as simple as possible.  
+        </p>
         <p>
-            Full source code is available on <a href="http://github.com/joellord" target="_blank">Github</a>
+            Full source code is available on <a href="http://github.com/joellord/TwilioDemo" target="_blank">Github</a>
         </p>
     </div>
 </div>
@@ -73,6 +75,7 @@
                 <li>Vanilla</li>
                 <li>Other</li>
             </ul>
+            <p>You can cast your vote by SMS at (819) 410-2910</p>
         </div>
         <div class="col-lg-6 col-md-6">
             <p>Results</p>
@@ -98,9 +101,10 @@
 
 <script type="text/javascript">
 $(document).on("ready", function() {
-
+    //Hold the current data so we don't update the graph when not needed
     var currentData = {};
 
+    //Generate the pie chart with C3js
     var graph = c3.generate({
         bindto: '#resultsGraph',
         data: {
@@ -109,9 +113,14 @@ $(document).on("ready", function() {
         }
     });
 
+    //Poll the server for data.  We call this function every 800 ms and update the
+    //chart when needed.  
     function pollData() {
+        //Fetch the data
         $.get("/results").done(function(result) {
+            //Do a deep comparison between arrays
             if (JSON.stringify(result) !== JSON.stringify(currentData)) {
+                //If data changed, update the chart
                 graph.load({columns: result});
                 currentData = result;
             }
